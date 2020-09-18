@@ -46,16 +46,15 @@ public class HttpResponseParser {
 		return response;
 	}
 
-	private void messageBody(HttpRequest request) {
+	private void messageBody(HttpResponse response) {
 		// TODO Auto-generated method stub
 	}
 
 	/**
-	 * @param request
 	 * @throws IOException
 	 * @throws UnexpectedCharException
 	 */
-	private void messageHeader(HttpRequest request)
+	private void messageHeader(HttpResponse response)
 			throws IOException, UnexpectedCharException {
 		Map<String, String> map = new HashMap<String, String>();
 
@@ -92,7 +91,8 @@ public class HttpResponseParser {
 			map.put(key.toString(), value.toString());
 		}
 
-		request.setHeader(map);
+		// TODO
+		//response.setHeader(map);
 	}
 
 	/**
