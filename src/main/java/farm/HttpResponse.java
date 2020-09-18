@@ -13,6 +13,7 @@ public class HttpResponse {
 	private String reasonPhrase;
 	private static Map<String, String> reasonPhraseMap;
 	private Map<String,String> headerMap;
+	private String body;
 
 	static {
 		reasonPhraseMap = new HashMap<String, String>();
@@ -75,8 +76,7 @@ public class HttpResponse {
 	}
 
 	public String getBody() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.body;
 	}
 
 	public void setHttpVersion(String httpVersion) {
@@ -105,4 +105,7 @@ public class HttpResponse {
 		return headerMap.get(key);
 	}
 
+	public void setBody(String body) {
+		this.body = body;
+	}
 }

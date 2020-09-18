@@ -34,8 +34,7 @@ class HttpResponseParserTest {
 		
 		assertEquals("keep-alive", response.getHeader("Connection"));
 		
-		/* assertEquals("<!DOCTYPE html>\n" + "<html>Hello</html>\n",
-				response.getBody()); */
+		assertEquals("<!DOCTYPE html>\n" + "<html>Hello</html>\n",
+				response.getBody());
 	}
-
 }

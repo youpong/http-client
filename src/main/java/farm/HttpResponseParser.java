@@ -34,20 +34,26 @@ public class HttpResponseParser {
 		try {
 			statusLine(response);
 			messageHeader(response);
-			//if (request.hasMessageBody())
-			//	messageBody(request);
+			//if (response.hasMessageBody())
+			messageBody(response);
 		} catch (IOException e) {
 			System.err.print(e);
 			System.exit(1);
 		}
 		if (debug)
 			System.out.println("Debug: " + in.getCopy());
-		// TODO:
+		
 		return response;
 	}
 
-	private void messageBody(HttpResponse response) {
-		// TODO Auto-generated method stub
+	private void messageBody(HttpResponse response) throws IOException {
+		int c;
+		
+		StringBuffer buf = new StringBuffer();
+		while((c = in.read()) != -1) {
+			buf.append((char)c);
+		}
+		response.setBody(buf.toString());
 	}
 
 	/**
