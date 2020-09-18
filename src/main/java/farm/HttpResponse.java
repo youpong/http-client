@@ -1,0 +1,97 @@
+package farm;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class HttpResponse {
+	private final String HTTP_VERSION = "HTTP/1.1";
+	private String contentType;
+	private long contentLength;
+	private String statusCode;
+	private String serverName;
+	private String httpVersion;
+	private String reasonPhrase;
+	private static Map<String, String> reasonPhraseMap;
+
+	static {
+		reasonPhraseMap = new HashMap<String, String>();
+		reasonPhraseMap.put("200", "OK");
+		reasonPhraseMap.put("404", "Not Found");
+		// reasonPhrase.put("405", "Method Not Allowed");
+		reasonPhraseMap.put("501", "Not Implemented");
+	}
+
+	public String gen() {
+		StringBuffer buf = new StringBuffer();
+		buf.append(genStatusLine());
+		buf.append(genServer());
+		buf.append(genContentType());
+		buf.append(genContentLength());
+		buf.append("\r\n");
+		return buf.toString();
+	}
+
+	public String genStatusLine() {
+		String phrase = reasonPhraseMap.get(statusCode);
+
+		return HTTP_VERSION + " " + statusCode + " " + phrase + "\r\n";
+	}
+
+	private String genServer() {
+		return "Server: " + this.serverName + "\r\n";
+	}
+
+	public String genContentType() {
+		return "Content-Type: " + contentType + "\r\n";
+	}
+
+	public String genContentLength() {
+		return "Content-Length: " + contentLength + "\r\n";
+	}
+
+	public String getStatusCode() {
+		return statusCode;
+	}
+
+	public void setStatusCode(String statusCode) {
+		this.statusCode = statusCode;
+	}
+
+	public void setContentType(String contentType) {
+		this.contentType = contentType;
+	}
+
+	public void setContentLength(long length) {
+		this.contentLength = length;
+	}
+
+	public long getContentLength() {
+		return contentLength;
+	}
+
+	public void setServer(String serverName) {
+		this.serverName = serverName;
+	}
+
+	public String getBody() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void setHttpVersion(String httpVersion) {
+		this.httpVersion = httpVersion;
+	}
+
+	public String getHttpVersion() {
+		return httpVersion;
+	}
+
+	public void setResonPhrase(String reasonPhrase) {
+		this.reasonPhrase = reasonPhrase;
+	}
+
+	public String getReasonPhrase() {
+		return reasonPhrase;
+	}
+
+}
