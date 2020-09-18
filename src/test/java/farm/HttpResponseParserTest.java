@@ -37,4 +37,26 @@ class HttpResponseParserTest {
 		assertEquals("<!DOCTYPE html>\n" + "<html>Hello</html>\n",
 				response.getBody());
 	}
+	
+	@Test
+	void twoMsg() throws UnexpectedCharException {
+		// @formatter:off
+		Reader reader = new StringReader(
+				"HTTP/1.1 200 OK\r\n" +
+				"\r\n" + 
+				"body1\n" +
+				"HTTP/1.1 200 OK\r\n" +
+				"\r\n" + 
+				"body2\n");
+		// @formatter:on
+		HttpResponse response;
+		response = HttpResponseParser.parse(reader, false);
+
+		assertEquals("200", response.getStatusCode());				
+		assertEquals("body1\n", response.getBody());
+		
+		response = HttpResponseParser.parse(reader, false);
+		assertEquals("200", response.getStatusCode());				
+		assertEquals("body2\n", response.getBody());
+	}
 }
