@@ -33,7 +33,7 @@ public class HttpResponseParser {
 
 		try {
 			statusLine(response);
-			//messageHeader(request);
+			messageHeader(response);
 			//if (request.hasMessageBody())
 			//	messageBody(request);
 		} catch (IOException e) {
@@ -91,8 +91,7 @@ public class HttpResponseParser {
 			map.put(key.toString(), value.toString());
 		}
 
-		// TODO
-		//response.setHeader(map);
+		response.setHeader(map);
 	}
 
 	/**

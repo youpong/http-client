@@ -12,6 +12,7 @@ public class HttpResponse {
 	private String httpVersion;
 	private String reasonPhrase;
 	private static Map<String, String> reasonPhraseMap;
+	private Map<String,String> headerMap;
 
 	static {
 		reasonPhraseMap = new HashMap<String, String>();
@@ -92,6 +93,16 @@ public class HttpResponse {
 
 	public String getReasonPhrase() {
 		return reasonPhrase;
+	}
+
+	public void setHeader(Map<String, String> map) {
+		this.headerMap = map;
+	}
+
+	public String getHeader(String key) {
+		if (headerMap == null)
+			return null;
+		return headerMap.get(key);
 	}
 
 }
