@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 class HttpResponseParserTest {
 
 	@Test
-	void test() throws UnexpectedCharException {
+	void normal() throws UnexpectedCharException {
 		// @formatter:off
 		Reader reader = new StringReader(
 				"HTTP/1.1 200 OK\r\n" +
@@ -32,6 +32,7 @@ class HttpResponseParserTest {
 		assertEquals("200", response.getStatusCode());
 		assertEquals("OK", response.getReasonPhrase());
 		
+		assertEquals("612", response.getHeader("Content-Length"));
 		assertEquals("keep-alive", response.getHeader("Connection"));
 		
 		assertEquals("<!DOCTYPE html>\n" + "<html>Hello</html>\n",
@@ -43,20 +44,22 @@ class HttpResponseParserTest {
 		// @formatter:off
 		Reader reader = new StringReader(
 				"HTTP/1.1 200 OK\r\n" +
+				"Content-Length: 6\r\n" + 
 				"\r\n" + 
 				"body1\n" +
 				"HTTP/1.1 200 OK\r\n" +
+				"Content-Length: 7\r\n" + 
 				"\r\n" + 
-				"body2\n");
+				"body 2\n");
 		// @formatter:on
 		HttpResponse response;
 		response = HttpResponseParser.parse(reader, false);
 
-		assertEquals("200", response.getStatusCode());				
+		assertEquals("200", response.getStatusCode());
 		assertEquals("body1\n", response.getBody());
 		
 		response = HttpResponseParser.parse(reader, false);
 		assertEquals("200", response.getStatusCode());				
-		assertEquals("body2\n", response.getBody());
+		assertEquals("body 2\n", response.getBody());
 	}
 }

@@ -12,7 +12,7 @@ public class HttpResponse {
 	private String httpVersion;
 	private String reasonPhrase;
 	private static Map<String, String> reasonPhraseMap;
-	private Map<String,String> headerMap;
+	private Map<String, String> headerMap;
 	private String body;
 
 	static {
