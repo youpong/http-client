@@ -6,7 +6,6 @@ import java.util.Map;
 public class HttpResponse {
 	private final String HTTP_VERSION = "HTTP/1.1";
 	private String contentType;
-	private long contentLength;
 	private String statusCode;
 	private String serverName;
 	private String httpVersion;
@@ -48,8 +47,23 @@ public class HttpResponse {
 	}
 
 	public String genContentLength() {
-		return "Content-Length: " + contentLength + "\r\n";
+		String len = getHeader("Content-Length");
+		return "Content-Length: " + ((len == null) ? "0" : len) + "\r\n";
 	}
+	
+	private String genAllHeaders() {
+		StringBuffer buf = new StringBuffer();
+		
+		for (var entry : headerMap.entrySet()) {
+			buf.append(genHeader(entry.getKey()));
+		}
+		return buf.toString();
+	}
+	
+	public String genHeader(String key) {
+		return key + ": " + getHeader(key) + "\r\n";
+	}
+	
 
 	public String getStatusCode() {
 		return statusCode;
@@ -64,11 +78,15 @@ public class HttpResponse {
 	}
 
 	public void setContentLength(long length) {
-		this.contentLength = length;
+		setHeader("Content-Length", String.valueOf(length));
+	}
+	
+	public void setHeader(String key, String value) {
+		headerMap.put(key, value);
 	}
 
 	public long getContentLength() {
-		return contentLength;
+		return Long.parseLong(getHeader("Content-Length"));
 	}
 
 	public void setServer(String serverName) {
