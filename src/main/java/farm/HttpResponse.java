@@ -5,13 +5,11 @@ import java.util.Map;
 
 public class HttpResponse {
 	private final String HTTP_VERSION = "HTTP/1.1";
-	private String contentType;
-	private String statusCode;
-	private String serverName;
 	private String httpVersion;
+	private String statusCode;
 	private String reasonPhrase;
 	private static Map<String, String> reasonPhraseMap;
-	private Map<String, String> headerMap;
+	private Map<String, String> headerMap = new HashMap<String,String>();
 	private String body;
 
 	static {
@@ -39,11 +37,11 @@ public class HttpResponse {
 	}
 
 	private String genServer() {
-		return "Server: " + this.serverName + "\r\n";
+		return genHeader("Server");
 	}
 
 	public String genContentType() {
-		return "Content-Type: " + contentType + "\r\n";
+		return genHeader("Content-Type");
 	}
 
 	public String genContentLength() {
@@ -64,7 +62,6 @@ public class HttpResponse {
 		return key + ": " + getHeader(key) + "\r\n";
 	}
 	
-
 	public String getStatusCode() {
 		return statusCode;
 	}
@@ -74,7 +71,7 @@ public class HttpResponse {
 	}
 
 	public void setContentType(String contentType) {
-		this.contentType = contentType;
+		setHeader("Content-Type", contentType);
 	}
 
 	public void setContentLength(long length) {
@@ -90,7 +87,7 @@ public class HttpResponse {
 	}
 
 	public void setServer(String serverName) {
-		this.serverName = serverName;
+		setHeader("Server", serverName);
 	}
 
 	public String getBody() {
@@ -114,7 +111,7 @@ public class HttpResponse {
 	}
 
 	public void setHeader(Map<String, String> map) {
-		this.headerMap = map;
+		headerMap.putAll(map);
 	}
 
 	public String getHeader(String key) {
