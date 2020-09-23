@@ -9,7 +9,7 @@ public class HttpResponse {
 	private String statusCode;
 	private String reasonPhrase;
 	private static Map<String, String> reasonPhraseMap;
-	private Map<String, String> headerMap = new HashMap<String,String>();
+	private Map<String, String> headerMap = new HashMap<String, String>();
 	private String body;
 
 	static {
@@ -23,45 +23,39 @@ public class HttpResponse {
 	public String gen() {
 		StringBuffer buf = new StringBuffer();
 		buf.append(genStatusLine());
-		buf.append(genServer());
-		buf.append(genContentType());
-		buf.append(genContentLength());
+		buf.append(genAllHeaders());
 		buf.append("\r\n");
+
 		return buf.toString();
 	}
 
 	public String genStatusLine() {
-		String phrase = reasonPhraseMap.get(statusCode);
-
-		return HTTP_VERSION + " " + statusCode + " " + phrase + "\r\n";
+		return HTTP_VERSION + " " + statusCode + " " + reasonPhraseMap.get(statusCode)
+				+ "\r\n";
 	}
 
-	private String genServer() {
-		return genHeader("Server");
-	}
-
-	public String genContentType() {
-		return genHeader("Content-Type");
-	}
-
-	public String genContentLength() {
+	private String genContentLength() {
 		String len = getHeader("Content-Length");
 		return "Content-Length: " + ((len == null) ? "0" : len) + "\r\n";
 	}
-	
+
 	private String genAllHeaders() {
 		StringBuffer buf = new StringBuffer();
-		
+
 		for (var entry : headerMap.entrySet()) {
 			buf.append(genHeader(entry.getKey()));
 		}
+
+		if (!headerMap.containsKey("Content-Length"))
+			buf.append(genContentLength());
+
 		return buf.toString();
 	}
-	
+
 	public String genHeader(String key) {
 		return key + ": " + getHeader(key) + "\r\n";
 	}
-	
+
 	public String getStatusCode() {
 		return statusCode;
 	}
@@ -70,24 +64,8 @@ public class HttpResponse {
 		this.statusCode = statusCode;
 	}
 
-	public void setContentType(String contentType) {
-		setHeader("Content-Type", contentType);
-	}
-
-	public void setContentLength(long length) {
-		setHeader("Content-Length", String.valueOf(length));
-	}
-	
 	public void setHeader(String key, String value) {
 		headerMap.put(key, value);
-	}
-
-	public long getContentLength() {
-		return Long.parseLong(getHeader("Content-Length"));
-	}
-
-	public void setServer(String serverName) {
-		setHeader("Server", serverName);
 	}
 
 	public String getBody() {
@@ -115,8 +93,6 @@ public class HttpResponse {
 	}
 
 	public String getHeader(String key) {
-		if (headerMap == null)
-			return null;
 		return headerMap.get(key);
 	}
 

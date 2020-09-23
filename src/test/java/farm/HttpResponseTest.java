@@ -11,18 +11,18 @@ public class HttpResponseTest {
 	public void foo() {
 		HttpResponse response = new HttpResponse();
 		response.setStatusCode("200");
-		response.setContentType("text/html");
+		response.setHeader("Content-Type", "text/html");
 
 		assertEquals("HTTP/1.1 200 OK\r\n", response.genStatusLine());
-		assertEquals("Content-Type: text/html\r\n", response.genContentType());
+		assertEquals("Content-Type: text/html\r\n", response.genHeader("Content-Type"));
 	}
 
 	@Test
 	public void testGen() {
 		HttpResponse response = new HttpResponse();
-		response.setServer("bait/0.1");
-		response.setStatusCode("404");
-		response.setContentType("text/html");
+		response.setStatusCode("404");		
+		response.setHeader("Server", "bait/0.1");
+		response.setHeader("Content-Type", "text/html");
 
 		//@formatter:off
 		assertEquals("HTTP/1.1 404 Not Found\r\n" 
