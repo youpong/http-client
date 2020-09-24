@@ -100,7 +100,7 @@ public class HttpResponseParser {
 			map.put(key.toString(), value.toString());
 		}
 
-		response.setHeader(map);
+		response.setAllHeaders(map);
 	}
 
 	/**

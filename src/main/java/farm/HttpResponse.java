@@ -89,7 +89,7 @@ public class HttpResponse {
 		return reasonPhrase;
 	}
 
-	public void setHeader(Map<String, String> map) {
+	public void setAllHeaders(Map<String, String> map) {
 		headerMap.putAll(map);
 	}
 

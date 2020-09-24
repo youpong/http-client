@@ -91,7 +91,7 @@ public class HttpRequestParser {
 			map.put(key.toString(), value.toString());
 		}
 
-		request.setHeader(map);
+		request.setAllHeaders(map);
 	}
 
 	/**

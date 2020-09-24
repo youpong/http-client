@@ -42,7 +42,7 @@ public class HttpRequest {
 		return false;
 	}
 
-	public void setHeader(Map<String, String> map) {
+	public void setAllHeaders(Map<String, String> map) {
 		headerMap.putAll(map);
 	}
 
