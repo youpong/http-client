@@ -3,14 +3,10 @@ package farm;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-//import java.io.Reader;
-import java.io.Writer;
 import java.net.Socket;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
-import java.util.HashMap;
-import java.util.Map;
 
 public class HttpClient {
 
@@ -43,9 +39,10 @@ public class HttpClient {
 	private static void execute(URI uri) {
 		try {
 			Socket socket = new Socket(uri.getHost(), uri.getPort());
-			Writer writer = new OutputStreamWriter(socket.getOutputStream());
-			writer.write(createHttpRequest(uri).generate());
-			writer.flush();
+			
+			HttpRequest req = createHttpRequest(uri);
+			req.generate(new OutputStreamWriter(socket.getOutputStream()));
+			
 			HttpResponse response = HttpResponseParser
 					.parse(new InputStreamReader(socket.getInputStream()), false);
 

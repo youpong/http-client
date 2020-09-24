@@ -1,5 +1,7 @@
 package farm;
 
+import java.io.IOException;
+import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -54,14 +56,12 @@ public class HttpRequest {
 		return headerMap.get(key);
 	}
 
-	public String generate() {
-		StringBuffer buf = new StringBuffer();
-
-		buf.append(genRequestLine());
+	public void generate(Writer writer) throws IOException {
+		writer.write(genRequestLine());
 		for (var entry : headerMap.entrySet()) {
-			buf.append(entry.getKey() + ": " + entry.getValue() + "\r\n");
+			writer.write(entry.getKey() + ": " + entry.getValue() + "\r\n");
 		}
-		buf.append("\r\n");
-		return buf.toString();
+		writer.write("\r\n");
+		writer.flush();
 	}
 }

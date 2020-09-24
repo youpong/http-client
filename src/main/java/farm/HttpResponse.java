@@ -1,5 +1,7 @@
 package farm;
 
+import java.io.IOException;
+import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,14 +22,12 @@ public class HttpResponse {
 		reasonPhraseMap.put("501", "Not Implemented");
 	}
 
-	public String gen() {
-		StringBuffer buf = new StringBuffer();
-		buf.append(genStatusLine());
-		buf.append(genAllHeaders());
-		buf.append("\r\n");
-		//buf.append(genBody());
-
-		return buf.toString();
+	public void generate(Writer writer) throws IOException {
+		writer.write(genStatusLine());
+		writer.write(genAllHeaders());
+		writer.write("\r\n");
+		//writer.write(genBody());
+		writer.flush();
 	}
 
 	public String genStatusLine() {

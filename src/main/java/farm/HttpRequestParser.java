@@ -14,7 +14,7 @@ public class HttpRequestParser {
 		this.debug = debug;
 	}
 
-	public static HttpRequest parseHttpRequest(Reader reader, boolean debug)
+	public static HttpRequest parse(Reader reader, boolean debug)
 			throws UnexpectedCharException {
 		return new HttpRequestParser(reader, debug).parse();
 	}
