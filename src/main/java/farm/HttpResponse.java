@@ -25,6 +25,7 @@ public class HttpResponse {
 		buf.append(genStatusLine());
 		buf.append(genAllHeaders());
 		buf.append("\r\n");
+		//buf.append(genBody());
 
 		return buf.toString();
 	}
