@@ -35,9 +35,7 @@ public class HttpClient {
 		request.setMethod("GET");
 		request.setRequestURI(uri.getPath());
 		request.setHttpVersion("HTTP/1.1");
-		Map<String, String> headers = new HashMap<String, String>();
-		headers.put("Host", "localhost");
-		request.setHeader(headers);
+		request.setHeader("Host", "localhost");
 
 		return request;
 	}
