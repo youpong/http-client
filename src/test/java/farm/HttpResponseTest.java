@@ -14,13 +14,14 @@ public class HttpResponseTest {
 		response.setHeader("Content-Type", "text/html");
 
 		assertEquals("HTTP/1.1 200 OK\r\n", response.genStatusLine());
-		assertEquals("Content-Type: text/html\r\n", response.genHeader("Content-Type"));
+		assertEquals("Content-Type: text/html\r\n",
+				response.genHeader("Content-Type"));
 	}
 
 	@Test
 	public void testGen() {
 		HttpResponse response = new HttpResponse();
-		response.setStatusCode("404");		
+		response.setStatusCode("404");
 		response.setHeader("Server", "bait/0.1");
 		response.setHeader("Content-Type", "text/html");
 

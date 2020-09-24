@@ -31,14 +31,14 @@ class HttpResponseParserTest {
 		assertEquals("HTTP/1.1", response.getHttpVersion());
 		assertEquals("200", response.getStatusCode());
 		assertEquals("OK", response.getReasonPhrase());
-		
+
 		assertEquals("612", response.getHeader("Content-Length"));
 		assertEquals("keep-alive", response.getHeader("Connection"));
-		
+
 		assertEquals("<!DOCTYPE html>\n" + "<html>Hello</html>\n",
 				response.getBody());
 	}
-	
+
 	@Test
 	void twoMsg() throws UnexpectedCharException {
 		// @formatter:off
@@ -57,9 +57,9 @@ class HttpResponseParserTest {
 
 		assertEquals("200", response.getStatusCode());
 		assertEquals("body1\n", response.getBody());
-		
+
 		response = HttpResponseParser.parse(reader, false);
-		assertEquals("200", response.getStatusCode());				
+		assertEquals("200", response.getStatusCode());
 		assertEquals("body 2\n", response.getBody());
 	}
 }
