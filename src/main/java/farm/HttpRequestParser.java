@@ -5,19 +5,18 @@ import java.io.Reader;
 import java.util.HashMap;
 import java.util.Map;
 
-public class HttpResponseParser {
-
+public class HttpRequestParser {
 	private Unreadable in;
 	private boolean debug;
 
-	private HttpResponseParser(Reader in, boolean debug) {
+	private HttpRequestParser(Reader in, boolean debug) {
 		this.in = new Unreadable(in);
 		this.debug = debug;
 	}
 
-	public static HttpResponse parse(Reader reader, boolean debug)
+	public static HttpRequest parseHttpRequest(Reader reader, boolean debug)
 			throws UnexpectedCharException {
-		return new HttpResponseParser(reader, debug).parse();
+		return new HttpRequestParser(reader, debug).parse();
 	}
 
 	/**
@@ -28,14 +27,14 @@ public class HttpResponseParser {
 	 * @return
 	 * @throws UnexpectedCharException
 	 */
-	private HttpResponse parse() throws UnexpectedCharException {
-		HttpResponse response = new HttpResponse();
+	private HttpRequest parse() throws UnexpectedCharException {
+		HttpRequest request = new HttpRequest();
 
 		try {
-			statusLine(response);
-			messageHeader(response);
-			//if (response.hasMessageBody())
-			messageBody(response);
+			requestLine(request);
+			messageHeader(request);
+			if (request.hasMessageBody())
+				messageBody(request);
 		} catch (IOException e) {
 			System.err.print(e);
 			System.exit(1);
@@ -43,27 +42,19 @@ public class HttpResponseParser {
 		if (debug)
 			System.out.println("Debug: " + in.getCopy());
 
-		return response;
+		return request;
 	}
 
-	private void messageBody(HttpResponse response) throws IOException {
-		int c;
-		int maxLen = Integer.parseInt(response.getHeader("Content-Length"));
-		StringBuffer buf = new StringBuffer();
-
-		for (int len = 0; len < maxLen; len++) {
-			if ((c = in.read()) == -1)
-				break;
-			buf.append((char) c);
-		}
-		response.setBody(buf.toString());
+	private void messageBody(HttpRequest request) {
+		// TODO Auto-generated method stub
 	}
 
 	/**
+	 * @param request
 	 * @throws IOException
 	 * @throws UnexpectedCharException
 	 */
-	private void messageHeader(HttpResponse response)
+	private void messageHeader(HttpRequest request)
 			throws IOException, UnexpectedCharException {
 		Map<String, String> map = new HashMap<String, String>();
 
@@ -100,39 +91,40 @@ public class HttpResponseParser {
 			map.put(key.toString(), value.toString());
 		}
 
-		response.setHeader(map);
+		request.setHeader(map);
 	}
 
 	/**
-	 * Status-Line = HTTP-Version SP Status-Code SP Reason-Phrase CRLF
+	 * Request-Line = Method SP Request-URI SP HTTP-Version CRLF
 	 * 
+	 * @param request
 	 * @throws IOException
 	 * @throws UnexpectedCharException
 	 */
-	private void statusLine(HttpResponse response)
+	private void requestLine(HttpRequest request)
 			throws IOException, UnexpectedCharException {
 		int c;
 		StringBuffer sbuf;
 
+		// Method
+		sbuf = new StringBuffer();
+		while ((c = in.read()) != -1) {
+			if (c == ' ')
+				break;
+			sbuf.append((char) c);
+		}
+		request.setMethod(sbuf.toString());
+
+		// Request-URI
+		sbuf = new StringBuffer();
+		while ((c = in.read()) != -1) {
+			if (c == ' ')
+				break;
+			sbuf.append((char) c);
+		}
+		request.setRequestURI(sbuf.toString());
+
 		// HTTP-Versoin
-		sbuf = new StringBuffer();
-		while ((c = in.read()) != -1) {
-			if (c == ' ')
-				break;
-			sbuf.append((char) c);
-		}
-		response.setHttpVersion(sbuf.toString());
-
-		// Status-Code
-		sbuf = new StringBuffer();
-		while ((c = in.read()) != -1) {
-			if (c == ' ')
-				break;
-			sbuf.append((char) c);
-		}
-		response.setStatusCode(sbuf.toString());
-
-		// Reason-Phrase
 		sbuf = new StringBuffer();
 		while ((c = in.read()) != -1) {
 			if (c == '\r') {
@@ -141,7 +133,7 @@ public class HttpResponseParser {
 			}
 			sbuf.append((char) c);
 		}
-		response.setResonPhrase(sbuf.toString());
+		request.setHttpVersion(sbuf.toString());
 	}
 
 	private void consum(int expected) throws IOException, UnexpectedCharException {
