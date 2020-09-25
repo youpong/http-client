@@ -11,7 +11,7 @@ public class HttpRequest {
 	private String httpVersion;
 	private Map<String, String> headerMap = new HashMap<String, String>();
 
-	public String genRequestLine() {
+	private String generateRequestLine() {
 		return method + " " + requestURI + " " + httpVersion + "\r\n";
 	}
 
@@ -57,7 +57,7 @@ public class HttpRequest {
 	}
 
 	public void generate(Writer writer) throws IOException {
-		writer.write(genRequestLine());
+		writer.write(generateRequestLine());
 		for (var entry : headerMap.entrySet()) {
 			writer.write(entry.getKey() + ": " + entry.getValue() + "\r\n");
 		}
