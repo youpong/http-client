@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class HttpResponseParser {
-
 	private Unreadable in;
 	private boolean debug;
 
@@ -46,17 +45,45 @@ public class HttpResponseParser {
 		return response;
 	}
 
-	private void messageBody(HttpResponse response) throws IOException {
+	/**
+	 * Status-Line = HTTP-Version SP Status-Code SP Reason-Phrase CRLF
+	 * 
+	 * @throws IOException
+	 * @throws UnexpectedCharException
+	 */
+	private void statusLine(HttpResponse response)
+			throws IOException, UnexpectedCharException {
 		int c;
-		int maxLen = Integer.parseInt(response.getHeader("Content-Length"));
-		StringBuffer buf = new StringBuffer();
+		StringBuffer sbuf;
 
-		for (int len = 0; len < maxLen; len++) {
-			if ((c = in.read()) == -1)
+		// HTTP-Versoin
+		sbuf = new StringBuffer();
+		while ((c = in.read()) != -1) {
+			if (c == ' ')
 				break;
-			buf.append((char) c);
+			sbuf.append((char) c);
 		}
-		response.setBody(buf.toString());
+		response.setHttpVersion(sbuf.toString());
+
+		// Status-Code
+		sbuf = new StringBuffer();
+		while ((c = in.read()) != -1) {
+			if (c == ' ')
+				break;
+			sbuf.append((char) c);
+		}
+		response.setStatusCode(sbuf.toString());
+
+		// Reason-Phrase
+		sbuf = new StringBuffer();
+		while ((c = in.read()) != -1) {
+			if (c == '\r') {
+				consum('\n');
+				break;
+			}
+			sbuf.append((char) c);
+		}
+		response.setResonPhrase(sbuf.toString());
 	}
 
 	/**
@@ -103,45 +130,17 @@ public class HttpResponseParser {
 		response.setAllHeaders(map);
 	}
 
-	/**
-	 * Status-Line = HTTP-Version SP Status-Code SP Reason-Phrase CRLF
-	 * 
-	 * @throws IOException
-	 * @throws UnexpectedCharException
-	 */
-	private void statusLine(HttpResponse response)
-			throws IOException, UnexpectedCharException {
+	private void messageBody(HttpResponse response) throws IOException {
 		int c;
-		StringBuffer sbuf;
+		int maxLen = Integer.parseInt(response.getHeader("Content-Length"));
+		StringBuffer buf = new StringBuffer();
 
-		// HTTP-Versoin
-		sbuf = new StringBuffer();
-		while ((c = in.read()) != -1) {
-			if (c == ' ')
+		for (int len = 0; len < maxLen; len++) {
+			if ((c = in.read()) == -1)
 				break;
-			sbuf.append((char) c);
+			buf.append((char) c);
 		}
-		response.setHttpVersion(sbuf.toString());
-
-		// Status-Code
-		sbuf = new StringBuffer();
-		while ((c = in.read()) != -1) {
-			if (c == ' ')
-				break;
-			sbuf.append((char) c);
-		}
-		response.setStatusCode(sbuf.toString());
-
-		// Reason-Phrase
-		sbuf = new StringBuffer();
-		while ((c = in.read()) != -1) {
-			if (c == '\r') {
-				consum('\n');
-				break;
-			}
-			sbuf.append((char) c);
-		}
-		response.setResonPhrase(sbuf.toString());
+		response.setBody(buf.toString());
 	}
 
 	private void consum(int expected) throws IOException, UnexpectedCharException {

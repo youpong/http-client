@@ -10,7 +10,7 @@ import java.io.StringWriter;
 //import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class HttpRequestTest {
-		
+
 	@Test
 	public void generateAndParse() throws IOException, UnexpectedCharException {
 		HttpRequest req = new HttpRequest();
@@ -20,14 +20,15 @@ public class HttpRequestTest {
 
 		StringWriter w = new StringWriter();
 		req.generate(w);
+		req = null;
 		HttpRequest req2 = HttpRequestParser.parse(new StringReader(w.toString()),
 				false);
 
 		assertEquals("GET", req2.getMethod());
 		assertEquals("/", req2.getRequestURI());
-		assertEquals("HTTP/1.1", req2.getHttpVersion());	
+		assertEquals("HTTP/1.1", req2.getHttpVersion());
 	}
-	
+
 	@Test
 	public void generateAndParse2() throws IOException, UnexpectedCharException {
 		HttpRequest req = new HttpRequest();
@@ -38,6 +39,7 @@ public class HttpRequestTest {
 
 		StringWriter w = new StringWriter();
 		req.generate(w);
+		req = null;
 		HttpRequest req2 = HttpRequestParser.parse(new StringReader(w.toString()),
 				false);
 

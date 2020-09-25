@@ -11,32 +11,40 @@ public class HttpRequest {
 	private String httpVersion;
 	private Map<String, String> headerMap = new HashMap<String, String>();
 
-	private String generateRequestLine() {
-		return method + " " + requestURI + " " + httpVersion + "\r\n";
+	public void setMethod(String method) {
+		this.method = method;
 	}
 
 	public String getMethod() {
 		return method;
 	}
 
+	public void setRequestURI(String requestURI) {
+		this.requestURI = requestURI;
+	}
+
 	public String getRequestURI() {
 		return requestURI;
+	}
+
+	public void setHttpVersion(String httpVersion) {
+		this.httpVersion = httpVersion;
 	}
 
 	public String getHttpVersion() {
 		return httpVersion;
 	}
 
-	public void setMethod(String method) {
-		this.method = method;
+	public void setHeader(String key, String value) {
+		headerMap.put(key, value);
 	}
 
-	public void setRequestURI(String requestURI) {
-		this.requestURI = requestURI;
+	public void setAllHeaders(Map<String, String> map) {
+		headerMap.putAll(map);
 	}
 
-	public void setHttpVersion(String httpVersion) {
-		this.httpVersion = httpVersion;
+	public String getHeader(String key) {
+		return headerMap.get(key);
 	}
 
 	public boolean hasMessageBody() {
@@ -44,17 +52,9 @@ public class HttpRequest {
 		return false;
 	}
 
-	public void setAllHeaders(Map<String, String> map) {
-		headerMap.putAll(map);
-	}
-
-	public void setHeader(String key, String value) {
-		headerMap.put(key, value);
-	}
-
-	public String getHeader(String key) {
-		return headerMap.get(key);
-	}
+	//
+	// Generate
+	//
 
 	public void generate(Writer writer) throws IOException {
 		writer.write(generateRequestLine());
@@ -64,4 +64,9 @@ public class HttpRequest {
 		writer.write("\r\n");
 		writer.flush();
 	}
+
+	private String generateRequestLine() {
+		return method + " " + requestURI + " " + httpVersion + "\r\n";
+	}
+
 }

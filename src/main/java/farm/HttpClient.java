@@ -39,10 +39,10 @@ public class HttpClient {
 	private static void execute(URI uri) {
 		try {
 			Socket socket = new Socket(uri.getHost(), uri.getPort());
-			
+
 			HttpRequest req = createHttpRequest(uri);
 			req.generate(new OutputStreamWriter(socket.getOutputStream()));
-			
+
 			HttpResponse response = HttpResponseParser
 					.parse(new InputStreamReader(socket.getInputStream()), false);
 

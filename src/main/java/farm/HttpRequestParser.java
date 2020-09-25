@@ -45,8 +45,46 @@ public class HttpRequestParser {
 		return request;
 	}
 
-	private void messageBody(HttpRequest request) {
-		// TODO Auto-generated method stub
+	/**
+	 * Request-Line = Method SP Request-URI SP HTTP-Version CRLF
+	 * 
+	 * @param request
+	 * @throws IOException
+	 * @throws UnexpectedCharException
+	 */
+	private void requestLine(HttpRequest request)
+			throws IOException, UnexpectedCharException {
+		int c;
+		StringBuffer sbuf;
+
+		// Method
+		sbuf = new StringBuffer();
+		while ((c = in.read()) != -1) {
+			if (c == ' ')
+				break;
+			sbuf.append((char) c);
+		}
+		request.setMethod(sbuf.toString());
+
+		// Request-URI
+		sbuf = new StringBuffer();
+		while ((c = in.read()) != -1) {
+			if (c == ' ')
+				break;
+			sbuf.append((char) c);
+		}
+		request.setRequestURI(sbuf.toString());
+
+		// HTTP-Versoin
+		sbuf = new StringBuffer();
+		while ((c = in.read()) != -1) {
+			if (c == '\r') {
+				consum('\n');
+				break;
+			}
+			sbuf.append((char) c);
+		}
+		request.setHttpVersion(sbuf.toString());
 	}
 
 	/**
@@ -94,46 +132,8 @@ public class HttpRequestParser {
 		request.setAllHeaders(map);
 	}
 
-	/**
-	 * Request-Line = Method SP Request-URI SP HTTP-Version CRLF
-	 * 
-	 * @param request
-	 * @throws IOException
-	 * @throws UnexpectedCharException
-	 */
-	private void requestLine(HttpRequest request)
-			throws IOException, UnexpectedCharException {
-		int c;
-		StringBuffer sbuf;
-
-		// Method
-		sbuf = new StringBuffer();
-		while ((c = in.read()) != -1) {
-			if (c == ' ')
-				break;
-			sbuf.append((char) c);
-		}
-		request.setMethod(sbuf.toString());
-
-		// Request-URI
-		sbuf = new StringBuffer();
-		while ((c = in.read()) != -1) {
-			if (c == ' ')
-				break;
-			sbuf.append((char) c);
-		}
-		request.setRequestURI(sbuf.toString());
-
-		// HTTP-Versoin
-		sbuf = new StringBuffer();
-		while ((c = in.read()) != -1) {
-			if (c == '\r') {
-				consum('\n');
-				break;
-			}
-			sbuf.append((char) c);
-		}
-		request.setHttpVersion(sbuf.toString());
+	private void messageBody(HttpRequest request) {
+		// TODO Auto-generated method stub
 	}
 
 	private void consum(int expected) throws IOException, UnexpectedCharException {

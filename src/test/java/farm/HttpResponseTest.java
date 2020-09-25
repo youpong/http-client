@@ -7,18 +7,43 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.io.StringWriter;
 
 public class HttpResponseTest {
 	@Test
-	public void foo() {
-		HttpResponse response = new HttpResponse();
-		response.setStatusCode("200");
-		response.setHeader("Content-Type", "text/html");
+	public void generateAndParse() throws IOException, UnexpectedCharException {
+		HttpResponse res = new HttpResponse();
+		res.setStatusCode("200");
 
-		assertEquals("HTTP/1.1 200 OK\r\n", response.genStatusLine());
-		assertEquals("Content-Type: text/html\r\n",
-				response.genHeader("Content-Type"));
+		StringWriter w = new StringWriter();
+		res.generate(w);
+		res = null;
+		HttpResponse res2 = HttpResponseParser.parse(new StringReader(w.toString()),
+				false);
+
+		assertEquals("HTTP/1.1", res2.getHttpVersion());
+		assertEquals("200", res2.getStatusCode());
+		assertEquals("OK", res2.getReasonPhrase());
+	}
+
+	@Test
+	public void generateAndParse2() throws IOException, UnexpectedCharException {
+		HttpResponse res = new HttpResponse();
+		res.setStatusCode("404");
+		res.setHeader("Content-Type", "text/html");
+
+		StringWriter w = new StringWriter();
+		res.generate(w);
+		res = null;
+		HttpResponse res2 = HttpResponseParser.parse(new StringReader(w.toString()),
+				false);
+
+		assertEquals("HTTP/1.1", res2.getHttpVersion());
+		assertEquals("404", res2.getStatusCode());
+		assertEquals("Not Found", res2.getReasonPhrase());
+
+		assertEquals("text/html", res2.getHeader("Content-Type"));
 	}
 
 	@Test
