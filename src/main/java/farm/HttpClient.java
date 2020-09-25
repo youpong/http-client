@@ -18,7 +18,7 @@ public class HttpClient {
 			System.exit(1);
 		}
 		try {
-			uri = new URI(args[0]);
+			uri = new URI(Util.completionURI(args[0]));
 			execute(uri);
 		} catch (URISyntaxException e) {
 			// TODO Auto-generated catch block
@@ -31,6 +31,7 @@ public class HttpClient {
 		request.setMethod("GET");
 		request.setRequestURI(uri.getPath());
 		request.setHttpVersion("HTTP/1.1");
+		// TODO: fix set hostname correctly.
 		request.setHeader("Host", "localhost");
 
 		return request;
