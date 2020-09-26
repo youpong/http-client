@@ -2,8 +2,9 @@ package farm;
 
 public class Util {
 
-	public static String completionURI(String uri) {
-		if (! uri.startsWith("http:")) {
+	// completion scheme:
+	public static String completionScheme(String uri) {
+		if (!uri.startsWith("http:")) {
 			return "http://" + uri;
 		}
 

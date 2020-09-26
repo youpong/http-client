@@ -39,8 +39,7 @@ class HttpResponseParserTest {
 
 		StringWriter w = new StringWriter();
 		response.writeBody(w);
-		assertEquals("<!DOCTYPE html>\n" + "<html>Hello</html>\n",
-				w.toString());
+		assertEquals("<!DOCTYPE html>\n" + "<html>Hello</html>\n", w.toString());
 	}
 
 	@Test

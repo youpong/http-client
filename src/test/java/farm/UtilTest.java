@@ -13,42 +13,42 @@ public class UtilTest {
 	@Test
 	public void foo() {
 		URI uri = URI.create("http://localhost:8080/topics/index.html");
-		
+
 		assertEquals("localhost", uri.getHost());
 	}
-	
+
 	@Test
 	public void testURI() {
 		URI uri;
-		
+
 		uri = URI.create("http://localhost:8080");
 		assertEquals("", uri.getPath());
-		
+
 		uri = URI.create("http://localhost:8080/");
 		assertEquals("/", uri.getPath());
 
 		uri = URI.create("http://localhost:8080/topics/");
 		assertEquals("/topics/", uri.getPath());
 	}
-	
+
 	@Test
 	public void testFile() {
 		File file;
-		
+
 		file = new File("");
 		assertEquals("", file.getName());
-		
+
 		file = new File("/");
 		assertEquals("", file.getName());
 
 		file = new File("/topics");
 		assertEquals("topics", file.getName());
 		//assertEquals(false, file.isDirectory());
-		
+
 		file = new File("/topics/");
 		assertEquals("topics", file.getName());
 		//assertEquals(false, file.isDirectory());
-		
+
 		file = new File("/topics/index.html");
 		assertEquals("index.html", file.getName());
 	}
@@ -61,7 +61,7 @@ public class UtilTest {
 		uri = new URI(uriString);
 		assertNull(uri.getHost());
 
-		String completion = Util.completionURI(uriString);
+		String completion = Util.completionScheme(uriString);
 		uri = new URI(completion);
 		assertEquals("http://localhost:8080/index.html", completion);
 		assertEquals("localhost", uri.getHost());
@@ -75,7 +75,7 @@ public class UtilTest {
 		uri = new URI(uriString);
 		assertNull(uri.getHost());
 
-		String completion = Util.completionURI(uriString);
+		String completion = Util.completionScheme(uriString);
 		uri = new URI(completion);
 		assertEquals("http://localhost/index.html", completion);
 		assertEquals("localhost", uri.getHost());
