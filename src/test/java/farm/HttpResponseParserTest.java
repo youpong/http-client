@@ -2,15 +2,17 @@ package farm;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.io.StringWriter;
 
 import org.junit.jupiter.api.Test;
 
 class HttpResponseParserTest {
 
 	@Test
-	void normal() throws UnexpectedCharException {
+	void normal() throws UnexpectedCharException, IOException {
 		// @formatter:off
 		Reader reader = new StringReader(
 				"HTTP/1.1 200 OK\r\n" +
@@ -35,12 +37,15 @@ class HttpResponseParserTest {
 		assertEquals("612", response.getHeader("Content-Length"));
 		assertEquals("keep-alive", response.getHeader("Connection"));
 
+		StringWriter w = new StringWriter();
+		response.writeBody(w);
 		assertEquals("<!DOCTYPE html>\n" + "<html>Hello</html>\n",
-				response.getBody());
+				w.toString());
 	}
 
 	@Test
-	void twoMsg() throws UnexpectedCharException {
+	void twoMsg() throws UnexpectedCharException, IOException {
+		StringWriter w;
 		// @formatter:off
 		Reader reader = new StringReader(
 				"HTTP/1.1 200 OK\r\n" +
@@ -56,10 +61,14 @@ class HttpResponseParserTest {
 		response = HttpResponseParser.parse(reader, false);
 
 		assertEquals("200", response.getStatusCode());
-		assertEquals("body1\n", response.getBody());
+		w = new StringWriter();
+		response.writeBody(w);
+		assertEquals("body1\n", w.toString());
 
 		response = HttpResponseParser.parse(reader, false);
 		assertEquals("200", response.getStatusCode());
-		assertEquals("body 2\n", response.getBody());
+		w = new StringWriter();
+		response.writeBody(w);
+		assertEquals("body 2\n", w.toString());
 	}
 }

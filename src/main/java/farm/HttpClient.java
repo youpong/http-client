@@ -47,7 +47,7 @@ public class HttpClient {
 			HttpResponse response = HttpResponseParser
 					.parse(new InputStreamReader(socket.getInputStream()), false);
 
-			System.out.print(response.getBody());
+			response.writeBody(new OutputStreamWriter(System.out));
 			socket.close();
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block

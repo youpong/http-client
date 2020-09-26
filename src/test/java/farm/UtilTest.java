@@ -3,6 +3,7 @@ package farm;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -10,9 +11,46 @@ import org.junit.jupiter.api.Test;
 
 public class UtilTest {
 	@Test
-	public void foo() throws URISyntaxException {
-		URI uri = new URI("http://localhost:8080/index.html");
+	public void foo() {
+		URI uri = URI.create("http://localhost:8080/topics/index.html");
+		
 		assertEquals("localhost", uri.getHost());
+	}
+	
+	@Test
+	public void testURI() {
+		URI uri;
+		
+		uri = URI.create("http://localhost:8080");
+		assertEquals("", uri.getPath());
+		
+		uri = URI.create("http://localhost:8080/");
+		assertEquals("/", uri.getPath());
+
+		uri = URI.create("http://localhost:8080/topics/");
+		assertEquals("/topics/", uri.getPath());
+	}
+	
+	@Test
+	public void testFile() {
+		File file;
+		
+		file = new File("");
+		assertEquals("", file.getName());
+		
+		file = new File("/");
+		assertEquals("", file.getName());
+
+		file = new File("/topics");
+		assertEquals("topics", file.getName());
+		//assertEquals(false, file.isDirectory());
+		
+		file = new File("/topics/");
+		assertEquals("topics", file.getName());
+		//assertEquals(false, file.isDirectory());
+		
+		file = new File("/topics/index.html");
+		assertEquals("index.html", file.getName());
 	}
 
 	@Test

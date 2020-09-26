@@ -62,8 +62,9 @@ public class HttpResponse {
 		this.body = body;
 	}
 
-	public String getBody() {
-		return this.body;
+	public void writeBody(Writer writer) throws IOException {
+		writer.write(this.body);
+		writer.flush();
 	}
 
 	//
