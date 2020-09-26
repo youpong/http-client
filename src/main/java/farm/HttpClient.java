@@ -14,22 +14,11 @@ import java.net.UnknownHostException;
 public class HttpClient {
 
 	public static void main(String[] args) {
-		URI uri;
-		String dest = "-";
 
-		if (args.length == 0 || args.length > 2) {
-			System.out.println("http-client uri");
-			System.exit(1);
-		}
-		if (args.length == 2) {
-			dest = args[1];
-		}
-
+		Options opts = Options.parse(args);
 		try {
-			uri = createURI(args[0]);
-			execute(uri, dest);
+			execute(createURI(opts.uri()), opts.dest());
 		} catch (URISyntaxException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -74,12 +63,10 @@ public class HttpClient {
 			response.writeBody(writer);
 			socket.close();
 		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (UnexpectedCharException e) {
-			// TODO
+			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
