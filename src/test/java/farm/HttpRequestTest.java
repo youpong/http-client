@@ -4,10 +4,9 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.StringReader;
 import java.io.StringWriter;
-//import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class HttpRequestTest {
 
@@ -21,8 +20,8 @@ public class HttpRequestTest {
 		StringWriter w = new StringWriter();
 		req.generate(w);
 		req = null;
-		HttpRequest req2 = HttpRequestParser.parse(new StringReader(w.toString()),
-				false);
+		HttpRequest req2 = HttpRequestParser
+				.parse(new ByteArrayInputStream(w.toString().getBytes()), false);
 
 		assertEquals("GET", req2.getMethod());
 		assertEquals("/", req2.getRequestURI());
@@ -40,8 +39,8 @@ public class HttpRequestTest {
 		StringWriter w = new StringWriter();
 		req.generate(w);
 		req = null;
-		HttpRequest req2 = HttpRequestParser.parse(new StringReader(w.toString()),
-				false);
+		HttpRequest req2 = HttpRequestParser
+				.parse(new ByteArrayInputStream(w.toString().getBytes()), false);
 
 		assertEquals("POST", req2.getMethod());
 		assertEquals("/index.html", req2.getRequestURI());

@@ -3,7 +3,6 @@ package farm;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.Socket;
@@ -57,8 +56,8 @@ public class HttpClient {
 			HttpRequest req = createHttpRequest(uri);
 			req.generate(new OutputStreamWriter(socket.getOutputStream()));
 
-			HttpResponse response = HttpResponseParser
-					.parse(new InputStreamReader(socket.getInputStream()), false);
+			HttpResponse response = HttpResponseParser.parse(socket.getInputStream(),
+					false);
 
 			response.writeBody(writer);
 			socket.close();

@@ -2,9 +2,9 @@ package farm;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.Reader;
-import java.io.StringReader;
+import java.io.InputStream;
 import java.io.StringWriter;
 
 import org.junit.jupiter.api.Test;
@@ -14,7 +14,7 @@ class HttpResponseParserTest {
 	@Test
 	void normal() throws UnexpectedCharException, IOException {
 		// @formatter:off
-		Reader reader = new StringReader(
+		String responseString =
 				"HTTP/1.1 200 OK\r\n" +
 				"Server: nginx/1.18.0 (Ubuntu)\r\n" +
 				"Date: Tue, 15 Sep 2020 11:46:14 GMT\r\n" +
@@ -26,9 +26,10 @@ class HttpResponseParserTest {
 				"Accept-Ranges: bytes\r\n" + 
 				"\r\n" + 
 				"<!DOCTYPE html>\n" + 
-				"<html>Hello</html>\n");
-		// @formatter:on
-		HttpResponse response = HttpResponseParser.parse(reader, false);
+				"<html>Hello</html>\n";
+		// @formatter:on		
+		HttpResponse response = HttpResponseParser.parse(
+				new ByteArrayInputStream(responseString.getBytes()), false);
 
 		assertEquals("HTTP/1.1", response.getHttpVersion());
 		assertEquals("200", response.getStatusCode());
@@ -44,9 +45,10 @@ class HttpResponseParserTest {
 
 	@Test
 	void twoMsg() throws UnexpectedCharException, IOException {
+		HttpResponse response;
 		StringWriter w;
 		// @formatter:off
-		Reader reader = new StringReader(
+		String responseString =
 				"HTTP/1.1 200 OK\r\n" +
 				"Content-Length: 6\r\n" + 
 				"\r\n" + 
@@ -54,17 +56,17 @@ class HttpResponseParserTest {
 				"HTTP/1.1 200 OK\r\n" +
 				"Content-Length: 7\r\n" + 
 				"\r\n" + 
-				"body 2\n");
+				"body 2\n";
 		// @formatter:on
-		HttpResponse response;
-		response = HttpResponseParser.parse(reader, false);
+		InputStream is = new ByteArrayInputStream(responseString.getBytes());
 
+		response = HttpResponseParser.parse(is, false);
 		assertEquals("200", response.getStatusCode());
 		w = new StringWriter();
 		response.writeBody(w);
 		assertEquals("body1\n", w.toString());
 
-		response = HttpResponseParser.parse(reader, false);
+		response = HttpResponseParser.parse(is, false);
 		assertEquals("200", response.getStatusCode());
 		w = new StringWriter();
 		response.writeBody(w);

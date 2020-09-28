@@ -6,8 +6,8 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.StringReader;
 import java.io.StringWriter;
 
 public class HttpResponseTest {
@@ -19,8 +19,8 @@ public class HttpResponseTest {
 		StringWriter w = new StringWriter();
 		res.generate(w);
 		res = null;
-		HttpResponse res2 = HttpResponseParser.parse(new StringReader(w.toString()),
-				false);
+		HttpResponse res2 = HttpResponseParser
+				.parse(new ByteArrayInputStream(w.toString().getBytes()), false);
 
 		assertEquals("HTTP/1.1", res2.getHttpVersion());
 		assertEquals("200", res2.getStatusCode());
@@ -36,8 +36,8 @@ public class HttpResponseTest {
 		StringWriter w = new StringWriter();
 		res.generate(w);
 		res = null;
-		HttpResponse res2 = HttpResponseParser.parse(new StringReader(w.toString()),
-				false);
+		HttpResponse res2 = HttpResponseParser
+				.parse(new ByteArrayInputStream(w.toString().getBytes()), false);
 
 		assertEquals("HTTP/1.1", res2.getHttpVersion());
 		assertEquals("404", res2.getStatusCode());

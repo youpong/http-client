@@ -1,22 +1,23 @@
 package farm;
 
 import java.io.IOException;
-import java.io.Reader;
+import java.io.InputStream;
+import java.io.PushbackInputStream;
 import java.util.HashMap;
 import java.util.Map;
 
 public class HttpResponseParser {
-	private Unreadable in;
+	private PushbackInputStream is;
 	private boolean debug;
 
-	private HttpResponseParser(Reader in, boolean debug) {
-		this.in = new Unreadable(in);
+	private HttpResponseParser(InputStream is, boolean debug) {
+		this.is = new PushbackInputStream(is);
 		this.debug = debug;
 	}
 
-	public static HttpResponse parse(Reader reader, boolean debug)
+	public static HttpResponse parse(InputStream is, boolean debug)
 			throws UnexpectedCharException {
-		return new HttpResponseParser(reader, debug).parse();
+		return new HttpResponseParser(is, debug).parse();
 	}
 
 	/**
@@ -39,9 +40,10 @@ public class HttpResponseParser {
 			System.err.print(e);
 			System.exit(1);
 		}
+		/*
 		if (debug)
 			System.out.println("Debug: " + in.getCopy());
-
+		*/
 		return response;
 	}
 
@@ -58,7 +60,7 @@ public class HttpResponseParser {
 
 		// HTTP-Versoin
 		sbuf = new StringBuffer();
-		while ((c = in.read()) != -1) {
+		while ((c = is.read()) != -1) {
 			if (c == ' ')
 				break;
 			sbuf.append((char) c);
@@ -67,7 +69,7 @@ public class HttpResponseParser {
 
 		// Status-Code
 		sbuf = new StringBuffer();
-		while ((c = in.read()) != -1) {
+		while ((c = is.read()) != -1) {
 			if (c == ' ')
 				break;
 			sbuf.append((char) c);
@@ -76,7 +78,7 @@ public class HttpResponseParser {
 
 		// Reason-Phrase
 		sbuf = new StringBuffer();
-		while ((c = in.read()) != -1) {
+		while ((c = is.read()) != -1) {
 			if (c == '\r') {
 				consum('\n');
 				break;
@@ -95,17 +97,17 @@ public class HttpResponseParser {
 		Map<String, String> map = new HashMap<String, String>();
 
 		int c;
-		while ((c = in.read()) != -1) {
+		while ((c = is.read()) != -1) {
 			// CRLF - end of header
 			if (c == '\r') {
 				consum('\n');
 				break;
 			}
-			in.unread(c);
+			is.unread(c);
 
 			// key
 			StringBuffer key = new StringBuffer();
-			while ((c = in.read()) != -1) {
+			while ((c = is.read()) != -1) {
 				if (c == ':')
 					break;
 				key.append((char) c);
@@ -116,7 +118,7 @@ public class HttpResponseParser {
 
 			// value
 			StringBuffer value = new StringBuffer();
-			while ((c = in.read()) != -1) {
+			while ((c = is.read()) != -1) {
 				if (c == '\r') {
 					consum('\n');
 					break;
@@ -136,7 +138,7 @@ public class HttpResponseParser {
 		StringBuffer buf = new StringBuffer();
 
 		for (int len = 0; len < maxLen; len++) {
-			if ((c = in.read()) == -1)
+			if ((c = is.read()) == -1)
 				break;
 			buf.append((char) c);
 		}
@@ -144,7 +146,7 @@ public class HttpResponseParser {
 	}
 
 	private void consum(int expected) throws IOException, UnexpectedCharException {
-		int c = in.read();
+		int c = is.read();
 		if (c != expected)
 			throw new UnexpectedCharException(
 					"expected (" + expected + ") actually (" + c + ")");
