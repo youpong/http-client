@@ -54,7 +54,7 @@ public class HttpClient {
 			Socket socket = new Socket(uri.getHost(), uri.getPort());
 
 			HttpRequest req = createHttpRequest(uri);
-			req.generate(new OutputStreamWriter(socket.getOutputStream()));
+			req.generate(socket.getOutputStream());
 
 			HttpResponse response = HttpResponseParser.parse(socket.getInputStream(),
 					false);

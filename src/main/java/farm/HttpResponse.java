@@ -1,6 +1,7 @@
 package farm;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
@@ -71,39 +72,31 @@ public class HttpResponse {
 	// Generate
 	//
 
-	public void generate(Writer writer) throws IOException {
-		writer.write(generateStatusLine());
-		writer.write(generateAllHeaders());
-		writer.write("\r\n");
-		//writer.write(genBody());
-		writer.flush();
+	public void generate(OutputStream os) throws IOException {
+		generateStatusLine(os);
+		generateAllHeaders(os);
+		os.write("\r\n".getBytes());
+		//genBody(os);
+
+		os.flush();
 	}
 
-	private String generateStatusLine() {
-		return HTTP_VERSION + " " + statusCode + " " + reasonPhraseMap.get(statusCode)
-				+ "\r\n";
+	private void generateStatusLine(OutputStream os) throws IOException {
+		String buf = HTTP_VERSION + " " + statusCode + " "
+				+ reasonPhraseMap.get(statusCode) + "\r\n";
+		os.write(buf.getBytes());
 	}
 
-	private String generateAllHeaders() {
+	private void generateAllHeaders(OutputStream os) throws IOException {
 		StringBuffer buf = new StringBuffer();
 
 		for (var entry : headerMap.entrySet()) {
-			buf.append(generateHeader(entry.getKey()));
+			buf.append(entry.getKey() + ": " + entry.getValue() + "\r\n");
 		}
 
 		if (!headerMap.containsKey("Content-Length"))
-			buf.append(generateContentLength());
+			buf.append("Content-Length: 0\r\n");
 
-		return buf.toString();
+		os.write(buf.toString().getBytes());
 	}
-
-	private String generateHeader(String key) {
-		return key + ": " + getHeader(key) + "\r\n";
-	}
-
-	private String generateContentLength() {
-		String len = getHeader("Content-Length");
-		return "Content-Length: " + ((len == null) ? "0" : len) + "\r\n";
-	}
-
 }

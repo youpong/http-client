@@ -28,8 +28,8 @@ class HttpResponseParserTest {
 				"<!DOCTYPE html>\n" + 
 				"<html>Hello</html>\n";
 		// @formatter:on		
-		HttpResponse response = HttpResponseParser.parse(
-				new ByteArrayInputStream(responseString.getBytes()), false);
+		HttpResponse response = HttpResponseParser
+				.parse(new ByteArrayInputStream(responseString.getBytes()), false);
 
 		assertEquals("HTTP/1.1", response.getHttpVersion());
 		assertEquals("200", response.getStatusCode());

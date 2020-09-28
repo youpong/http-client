@@ -1,7 +1,7 @@
 package farm;
 
 import java.io.IOException;
-import java.io.Writer;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -56,17 +56,22 @@ public class HttpRequest {
 	// Generate
 	//
 
-	public void generate(Writer writer) throws IOException {
-		writer.write(generateRequestLine());
+	public void generate(OutputStream os) throws IOException {
+		generateRequestLine(os);
+
+		StringBuffer buf = new StringBuffer();
 		for (var entry : headerMap.entrySet()) {
-			writer.write(entry.getKey() + ": " + entry.getValue() + "\r\n");
+			buf.append(entry.getKey() + ": " + entry.getValue() + "\r\n");
 		}
-		writer.write("\r\n");
-		writer.flush();
+		buf.append("\r\n");
+
+		os.write(buf.toString().getBytes());
+		os.flush();
 	}
 
-	private String generateRequestLine() {
-		return method + " " + requestURI + " " + httpVersion + "\r\n";
+	private void generateRequestLine(OutputStream os) throws IOException {
+		String buf = method + " " + requestURI + " " + httpVersion + "\r\n";
+		os.write(buf.getBytes());
 	}
 
 }

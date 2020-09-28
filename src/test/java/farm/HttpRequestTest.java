@@ -5,8 +5,8 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.StringWriter;
 
 public class HttpRequestTest {
 
@@ -17,11 +17,11 @@ public class HttpRequestTest {
 		req.setRequestURI("/");
 		req.setHttpVersion("HTTP/1.1");
 
-		StringWriter w = new StringWriter();
-		req.generate(w);
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		req.generate(os);
 		req = null;
 		HttpRequest req2 = HttpRequestParser
-				.parse(new ByteArrayInputStream(w.toString().getBytes()), false);
+				.parse(new ByteArrayInputStream(os.toByteArray()), false);
 
 		assertEquals("GET", req2.getMethod());
 		assertEquals("/", req2.getRequestURI());
@@ -36,11 +36,11 @@ public class HttpRequestTest {
 		req.setHttpVersion("HTTP/1.0");
 		req.setHeader("Host", "localhost");
 
-		StringWriter w = new StringWriter();
-		req.generate(w);
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		req.generate(os);
 		req = null;
 		HttpRequest req2 = HttpRequestParser
-				.parse(new ByteArrayInputStream(w.toString().getBytes()), false);
+				.parse(new ByteArrayInputStream(os.toByteArray()), false);
 
 		assertEquals("POST", req2.getMethod());
 		assertEquals("/index.html", req2.getRequestURI());

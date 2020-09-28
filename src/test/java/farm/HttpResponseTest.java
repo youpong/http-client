@@ -7,8 +7,8 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.StringWriter;
 
 public class HttpResponseTest {
 	@Test
@@ -16,11 +16,11 @@ public class HttpResponseTest {
 		HttpResponse res = new HttpResponse();
 		res.setStatusCode("200");
 
-		StringWriter w = new StringWriter();
-		res.generate(w);
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		res.generate(os);
 		res = null;
 		HttpResponse res2 = HttpResponseParser
-				.parse(new ByteArrayInputStream(w.toString().getBytes()), false);
+				.parse(new ByteArrayInputStream(os.toByteArray()), false);
 
 		assertEquals("HTTP/1.1", res2.getHttpVersion());
 		assertEquals("200", res2.getStatusCode());
@@ -33,11 +33,11 @@ public class HttpResponseTest {
 		res.setStatusCode("404");
 		res.setHeader("Content-Type", "text/html");
 
-		StringWriter w = new StringWriter();
-		res.generate(w);
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		res.generate(os);
 		res = null;
 		HttpResponse res2 = HttpResponseParser
-				.parse(new ByteArrayInputStream(w.toString().getBytes()), false);
+				.parse(new ByteArrayInputStream(os.toByteArray()), false);
 
 		assertEquals("HTTP/1.1", res2.getHttpVersion());
 		assertEquals("404", res2.getStatusCode());
@@ -53,15 +53,15 @@ public class HttpResponseTest {
 		response.setHeader("Server", "bait/0.1");
 		response.setHeader("Content-Type", "text/html");
 
-		StringWriter w = new StringWriter();
-		response.generate(w);
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		response.generate(os);
 
 		//@formatter:off
 		assertEquals("HTTP/1.1 404 Not Found\r\n" 
 				+ "Server: bait/0.1\r\n"
 				+ "Content-Type: text/html\r\n" 
 				+ "Content-Length: 0\r\n" + "\r\n",
-				w.toString());
+				os.toString());
 		//@formatter:on
 	}
 }
