@@ -2,18 +2,13 @@ package farm;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PushbackInputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-public class HttpRequestParser {
-	private PushbackInputStream is;
-	@SuppressWarnings("unused")
-	private boolean debug;
+public class HttpRequestParser extends HttpMessageParser {
 
 	private HttpRequestParser(InputStream is, boolean debug) {
-		this.is = new PushbackInputStream(is);
-		this.debug = debug;
+		super(is, debug);
 	}
 
 	public static HttpRequest parse(InputStream is, boolean debug)
@@ -137,12 +132,5 @@ public class HttpRequestParser {
 
 	private void messageBody(HttpRequest request) {
 		// TODO Auto-generated method stub
-	}
-
-	private void consum(int expected) throws IOException, UnexpectedCharException {
-		int c = is.read();
-		if (c != expected)
-			throw new UnexpectedCharException(
-					"expected (" + expected + ") actually (" + c + ")");
 	}
 }

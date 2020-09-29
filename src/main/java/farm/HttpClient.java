@@ -32,12 +32,12 @@ public class HttpClient {
 
 	private static HttpRequest createHttpRequest(URI uri) {
 		HttpRequest request = new HttpRequest();
-		
+
 		// request-line
 		request.setMethod("GET");
 		request.setRequestURI(uri.getPath());
 		request.setHttpVersion("HTTP/1.1");
-		
+
 		// header
 		if (uri.getPort() == -1)
 			request.setHeader("Host", uri.getHost());
