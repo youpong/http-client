@@ -2,7 +2,6 @@ package farm;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -63,9 +62,9 @@ public class HttpResponse {
 		this.body = body;
 	}
 
-	public void writeBody(Writer writer) throws IOException {
-		writer.write(this.body);
-		writer.flush();
+	public void writeBody(OutputStream os) throws IOException {
+		os.write(this.body.getBytes());
+		os.flush();
 	}
 
 	//

@@ -1,10 +1,9 @@
 package farm;
 
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -44,11 +43,11 @@ public class HttpClient {
 
 	private static void execute(URI uri, String dest) {
 		try {
-			Writer writer;
+			OutputStream os;
 			if (dest.equals("-")) {
-				writer = new OutputStreamWriter(System.out);
+				os = System.out;
 			} else {
-				writer = new FileWriter(new File(dest));
+				os = new FileOutputStream(new File(dest));
 			}
 
 			Socket socket = new Socket(uri.getHost(), uri.getPort());
@@ -59,7 +58,7 @@ public class HttpClient {
 			HttpResponse response = HttpResponseParser.parse(socket.getInputStream(),
 					false);
 
-			response.writeBody(writer);
+			response.writeBody(os);
 			socket.close();
 		} catch (UnknownHostException e) {
 			e.printStackTrace();

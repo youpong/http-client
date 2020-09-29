@@ -3,9 +3,9 @@ package farm;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringWriter;
 
 import org.junit.jupiter.api.Test;
 
@@ -38,15 +38,19 @@ class HttpResponseParserTest {
 		assertEquals("612", response.getHeader("Content-Length"));
 		assertEquals("keep-alive", response.getHeader("Connection"));
 
-		StringWriter w = new StringWriter();
-		response.writeBody(w);
-		assertEquals("<!DOCTYPE html>\n" + "<html>Hello</html>\n", w.toString());
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		response.writeBody(os);
+		// @formatter:off
+		assertEquals("<!DOCTYPE html>\n" + 
+		             "<html>Hello</html>\n", 
+		             os.toString());
+		// @formatter:on
 	}
 
 	@Test
 	void twoMsg() throws UnexpectedCharException, IOException {
 		HttpResponse response;
-		StringWriter w;
+		ByteArrayOutputStream os;
 		// @formatter:off
 		String responseString =
 				"HTTP/1.1 200 OK\r\n" +
@@ -62,14 +66,15 @@ class HttpResponseParserTest {
 
 		response = HttpResponseParser.parse(is, false);
 		assertEquals("200", response.getStatusCode());
-		w = new StringWriter();
-		response.writeBody(w);
-		assertEquals("body1\n", w.toString());
+		
+		os = new ByteArrayOutputStream();
+		response.writeBody(os);
+		assertEquals("body1\n", os.toString());
 
 		response = HttpResponseParser.parse(is, false);
 		assertEquals("200", response.getStatusCode());
-		w = new StringWriter();
-		response.writeBody(w);
-		assertEquals("body 2\n", w.toString());
+		os.reset();
+		response.writeBody(os);
+		assertEquals("body 2\n", os.toString());
 	}
 }
