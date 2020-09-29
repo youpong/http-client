@@ -1,5 +1,6 @@
 package farm;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PushbackInputStream;
@@ -135,14 +136,14 @@ public class HttpResponseParser {
 	private void messageBody(HttpResponse response) throws IOException {
 		int c;
 		int maxLen = Integer.parseInt(response.getHeader("Content-Length"));
-		StringBuffer buf = new StringBuffer();
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
 
 		for (int len = 0; len < maxLen; len++) {
 			if ((c = is.read()) == -1)
 				break;
-			buf.append((char) c);
+			os.write(c);
 		}
-		response.setBody(buf.toString());
+		response.setBody(os.toByteArray());
 	}
 
 	private void consum(int expected) throws IOException, UnexpectedCharException {

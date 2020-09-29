@@ -5,6 +5,11 @@ import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * respsents HTTP Response message.
+ * 
+ * @author nakajimay
+ */
 public class HttpResponse {
 	private final String HTTP_VERSION = "HTTP/1.1";
 	private static Map<String, String> reasonPhraseMap;
@@ -12,7 +17,7 @@ public class HttpResponse {
 	private String statusCode;
 	private String reasonPhrase;
 	private Map<String, String> headerMap = new HashMap<String, String>();
-	private String body;
+	private byte[] body;
 
 	static {
 		reasonPhraseMap = new HashMap<String, String>();
@@ -58,19 +63,21 @@ public class HttpResponse {
 		return headerMap.get(key);
 	}
 
-	public void setBody(String body) {
+	public void setBody(byte[] body) {
 		this.body = body;
 	}
 
+	/**
+	 * write Contents, HTTP message payload.
+	 */
 	public void writeBody(OutputStream os) throws IOException {
-		os.write(this.body.getBytes());
+		os.write(body);
 		os.flush();
 	}
 
-	//
-	// Generate
-	//
-
+	/**
+	 * Generate HTTP message. put it on HTTP.
+	 */
 	public void generate(OutputStream os) throws IOException {
 		generateStatusLine(os);
 		generateAllHeaders(os);

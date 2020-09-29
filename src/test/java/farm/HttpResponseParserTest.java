@@ -66,7 +66,7 @@ class HttpResponseParserTest {
 
 		response = HttpResponseParser.parse(is, false);
 		assertEquals("200", response.getStatusCode());
-		
+
 		os = new ByteArrayOutputStream();
 		response.writeBody(os);
 		assertEquals("body1\n", os.toString());
