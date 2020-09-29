@@ -35,8 +35,10 @@ public class HttpClient {
 		request.setMethod("GET");
 		request.setRequestURI(uri.getPath());
 		request.setHttpVersion("HTTP/1.1");
-		// TODO: fix set hostname correctly.
-		request.setHeader("Host", "localhost");
+		if (uri.getPort() == -1)
+			request.setHeader("Host", uri.getHost());
+		else
+			request.setHeader("Host", uri.getHost() + ":" + uri.getPort());
 
 		return request;
 	}

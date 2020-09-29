@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 public class UtilTest {
 	@Test
-	public void foo() {
+	public void uri_getHost() {
 		URI uri = URI.create("http://localhost:8080/topics/index.html");
 
 		assertEquals("localhost", uri.getHost());
@@ -54,7 +54,7 @@ public class UtilTest {
 	}
 
 	@Test
-	public void foo2() throws URISyntaxException {
+	public void completionScheme() throws URISyntaxException {
 		URI uri;
 		String uriString = "localhost:8080/index.html";
 
@@ -68,7 +68,7 @@ public class UtilTest {
 	}
 
 	@Test
-	public void foo3() throws URISyntaxException {
+	public void completionScheme2() throws URISyntaxException {
 		URI uri;
 		String uriString = "localhost/index.html";
 
