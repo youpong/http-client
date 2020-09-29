@@ -50,7 +50,12 @@ public class HttpClient {
 				os = new FileOutputStream(new File(dest));
 			}
 
-			Socket socket = new Socket(uri.getHost(), uri.getPort());
+			int port = uri.getPort();
+			if (uri.getPort() == -1) {
+				port = new Service(uri.getScheme()).getPort();
+			}
+
+			Socket socket = new Socket(uri.getHost(), port);
 
 			HttpRequest req = createHttpRequest(uri);
 			req.generate(socket.getOutputStream());
@@ -65,6 +70,8 @@ public class HttpClient {
 		} catch (UnexpectedCharException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (UnknownServiceException e) {
 			e.printStackTrace();
 		}
 	}
