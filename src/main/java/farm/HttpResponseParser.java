@@ -9,6 +9,7 @@ import java.util.Map;
 
 public class HttpResponseParser {
 	private PushbackInputStream is;
+	@SuppressWarnings("unused")
 	private boolean debug;
 
 	private HttpResponseParser(InputStream is, boolean debug) {

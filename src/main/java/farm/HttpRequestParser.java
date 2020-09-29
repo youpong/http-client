@@ -8,6 +8,7 @@ import java.util.Map;
 
 public class HttpRequestParser {
 	private PushbackInputStream is;
+	@SuppressWarnings("unused")
 	private boolean debug;
 
 	private HttpRequestParser(InputStream is, boolean debug) {
