@@ -1,4 +1,4 @@
-package farm;
+package farm.httpclient;
 
 public class Options {
 

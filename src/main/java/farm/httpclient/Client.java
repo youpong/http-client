@@ -1,4 +1,4 @@
-package farm;
+package farm.httpclient;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -9,7 +9,15 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 
-public class HttpClient {
+import farm.HttpRequest;
+import farm.HttpResponse;
+import farm.HttpResponseParser;
+import farm.Service;
+import farm.UnexpectedCharException;
+import farm.UnknownServiceException;
+import farm.Util;
+
+public class Client {
 
 	public static void main(String[] args) {
 
