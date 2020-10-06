@@ -1,5 +1,7 @@
 package farm.httpclient;
 
+import farm.Http;
+
 public class Options {
 
 	private String dest = "-";
@@ -9,7 +11,7 @@ public class Options {
 		Options opts = new Options();
 		if (args.length == 0 || args.length > 2) {
 			System.out.println("http-client uri [dest]");
-			System.exit(1);
+			System.exit(Http.EXIT_FAILURE);
 		}
 		if (args.length == 2) {
 			opts.dest = args[1];
@@ -26,5 +28,4 @@ public class Options {
 	public String dest() {
 		return dest;
 	}
-
 }
