@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 
 import org.junit.jupiter.api.Test;
@@ -12,7 +11,7 @@ import org.junit.jupiter.api.Test;
 class HttpResponseParserTest {
 
 	@Test
-	void normal() throws UnexpectedCharException, IOException {
+	void normal() throws Exception {
 		// @formatter:off
 		String responseString =
 				"HTTP/1.1 200 OK\r\n" +
@@ -48,7 +47,7 @@ class HttpResponseParserTest {
 	}
 
 	@Test
-	void twoMsg() throws UnexpectedCharException, IOException {
+	void twoMsg() throws Exception {
 		HttpResponse response;
 		ByteArrayOutputStream os;
 		// @formatter:off
