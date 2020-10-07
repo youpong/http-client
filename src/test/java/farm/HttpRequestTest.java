@@ -6,12 +6,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 
 public class HttpRequestTest {
 
 	@Test
-	public void generateAndParse() throws IOException, UnexpectedCharException {
+	public void generateAndParse() throws Exception {
 		HttpRequest req = new HttpRequest();
 		req.setMethod("GET");
 		req.setRequestURI("/");
@@ -29,7 +28,7 @@ public class HttpRequestTest {
 	}
 
 	@Test
-	public void generateAndParse2() throws IOException, UnexpectedCharException {
+	public void generateAndParse2() throws Exception {
 		HttpRequest req = new HttpRequest();
 		req.setMethod("POST");
 		req.setRequestURI("/index.html");

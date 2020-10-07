@@ -15,6 +15,7 @@ import farm.Service;
 import farm.Util;
 
 public class Client {
+	public static final String HTTP_VERSION = "HTTP/1.1";
 
 	public static void main(String[] args) {
 		Options opts = Options.parse(args);
@@ -42,7 +43,7 @@ public class Client {
 		// request-line
 		request.setMethod("GET");
 		request.setRequestURI(uri.getPath());
-		request.setHttpVersion("HTTP/1.1");
+		request.setHttpVersion(HTTP_VERSION);
 
 		// header
 		if (uri.getPort() == -1)
