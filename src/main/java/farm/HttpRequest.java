@@ -2,14 +2,11 @@ package farm;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.HashMap;
-import java.util.Map;
 
-public class HttpRequest {
+public class HttpRequest extends HttpMessage {
 	private String method;
 	private String requestURI;
 	private String httpVersion;
-	private Map<String, String> headerMap = new HashMap<String, String>();
 
 	public void setMethod(String method) {
 		this.method = method;
@@ -35,18 +32,6 @@ public class HttpRequest {
 		return httpVersion;
 	}
 
-	public void setHeader(String key, String value) {
-		headerMap.put(key, value);
-	}
-
-	public void setAllHeaders(Map<String, String> map) {
-		headerMap.putAll(map);
-	}
-
-	public String getHeader(String key) {
-		return headerMap.get(key);
-	}
-
 	public boolean hasMessageBody() {
 		// TODO
 		return false;
@@ -58,14 +43,7 @@ public class HttpRequest {
 
 	public void generate(OutputStream os) throws IOException {
 		generateRequestLine(os);
-
-		StringBuffer buf = new StringBuffer();
-		for (var entry : headerMap.entrySet()) {
-			buf.append(entry.getKey() + ": " + entry.getValue() + "\r\n");
-		}
-		buf.append("\r\n");
-
-		os.write(buf.toString().getBytes());
+		generateHeaders(os);
 		os.flush();
 	}
 
@@ -74,4 +52,13 @@ public class HttpRequest {
 		os.write(buf.getBytes());
 	}
 
+	private void generateHeaders(OutputStream os) throws IOException {
+		StringBuffer buf = new StringBuffer();
+		for (var entry : headerMap.entrySet()) {
+			buf.append(entry.getKey() + ": " + entry.getValue() + "\r\n");
+		}
+		buf.append("\r\n");
+
+		os.write(buf.toString().getBytes());
+	}
 }
