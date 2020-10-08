@@ -16,9 +16,5 @@ public abstract class HttpMessage {
 		return headerMap.get(key);
 	}
 
-	public void setAllHeaders(Map<String, String> map) {
-		headerMap.putAll(map);
-	}
-
 	public abstract void generate(OutputStream os) throws IOException;
 }
