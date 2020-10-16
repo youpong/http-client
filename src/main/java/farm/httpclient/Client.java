@@ -21,7 +21,11 @@ public class Client {
 	public static void main(String[] args) {
 		try {
 			Options opts = Options.parse(args);
-			execute(createURI(opts.uri()), opts.dest());
+			if (opts.times() == 1)
+				execute(createURI(opts.uri()), opts.dest());
+			else
+				for (int i = 0; i < opts.times(); i++)
+					execute(createURI(opts.uri()), opts.dest());
 		} catch (OptionParseException e) {
 			System.err.println(e.getMessage());
 			Options.printUsage(System.err);
