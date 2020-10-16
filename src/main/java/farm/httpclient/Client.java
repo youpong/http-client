@@ -16,12 +16,16 @@ import farm.Util;
 
 public class Client {
 	public static final String HTTP_VERSION = "HTTP/1.1";
+	public static final String PROG_NAME = "httpc";
 
 	public static void main(String[] args) {
-		Options opts = Options.parse(args);
-
 		try {
+			Options opts = Options.parse(args);
 			execute(createURI(opts.uri()), opts.dest());
+		} catch (OptionParseException e) {
+			System.err.println(e.getMessage());
+			Options.printUsage(System.err);
+			System.exit(Http.EXIT_FAILURE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(Http.EXIT_FAILURE);
@@ -57,7 +61,7 @@ public class Client {
 
 	private static void execute(URI uri, String dest) throws Exception {
 		OutputStream os;
-		if (dest.equals("-")) {
+		if (dest == null) {
 			os = System.out;
 		} else {
 			os = new FileOutputStream(new File(dest));
