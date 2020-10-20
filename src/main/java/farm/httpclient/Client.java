@@ -53,11 +53,13 @@ public class Client {
 		request.setRequestURI(uri.getPath());
 		request.setHttpVersion(HTTP_VERSION);
 
-		// header
+		// headers
+
 		if (uri.getPort() == -1)
 			request.setHeader("Host", uri.getHost());
 		else
 			request.setHeader("Host", uri.getHost() + ":" + uri.getPort());
+
 		request.setHeader("User-Agent", "Calf/0.1");
 
 		return request;

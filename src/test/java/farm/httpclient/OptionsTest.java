@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 public class OptionsTest {
 	@Test
 	public void arg1() throws Exception {
-		String[] args = {"google.com"};
+		String[] args = { "google.com" };
 		Options opts = Options.parse(args);
 		assertEquals("google.com", opts.uri());
 		assertEquals(null, opts.dest());
@@ -17,7 +17,7 @@ public class OptionsTest {
 
 	@Test
 	public void args2() throws Exception {
-		String[] args = {"google.com", "index.html"};
+		String[] args = { "google.com", "index.html" };
 		Options opts = Options.parse(args);
 		assertEquals("google.com", opts.uri());
 		assertEquals("index.html", opts.dest());
@@ -25,7 +25,7 @@ public class OptionsTest {
 
 	@Test
 	public void optionRequiresArg() {
-		String[] args = {"-n"};
+		String[] args = { "-n" };
 		OptionParseException e = assertThrows(OptionParseException.class,
 				() -> Options.parse(args));
 
@@ -34,7 +34,7 @@ public class OptionsTest {
 
 	@Test
 	public void optionRequireNumber() {
-		String[] args = {"-n", "two"};
+		String[] args = { "-n", "two" };
 
 		OptionParseException e = assertThrows(OptionParseException.class,
 				() -> Options.parse(args));
@@ -55,7 +55,7 @@ public class OptionsTest {
 
 	@Test
 	public void tooManyArgs() {
-		String[] args = {"one", "two", "three"};
+		String[] args = { "one", "two", "three" };
 
 		OptionParseException e = assertThrows(OptionParseException.class,
 				() -> Options.parse(args));
