@@ -78,22 +78,14 @@ public class HttpResponseParser extends HttpMessageParser {
 
 	private void messageBody(HttpResponse response) throws IOException {
 		int c;
-		int maxLen = -1;
+		int maxLen = Integer.parseInt(response.getHeader("Content-Length"));
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 
-		if (response.getHeader("Content-Length") != null)
-			maxLen = Integer.parseInt(response.getHeader("Content-Length"));
-
-		if (maxLen > 0) {
-			for (int len = 0; len < maxLen; len++) {
-				if ((c = is.read()) == -1)
-					break;
-				os.write(c);
-			}
-		} else
-			while ((c = is.read()) != -1)
-				os.write(c);
-
+		for (int len = 0; len < maxLen; len++) {
+			if ((c = is.read()) == -1)
+				break;
+			os.write(c);
+		}
 		response.setBody(os.toByteArray());
 	}
 }
